@@ -98,7 +98,7 @@ public class KakaoOauthService implements OauthService {
             // 해당 이메일이 DB상에 존재한다면
             if (!ObjectUtils.isEmpty(findMember)) {
                 // 토큰 발급 후 리턴
-                return jwtUtil.generateToken(findMember.getEmail());
+                return jwtUtil.generateToken(findMember);
             }
 
             // 해당 이메일이 존재하지 않다면 회원가입
@@ -114,7 +114,7 @@ public class KakaoOauthService implements OauthService {
             authRepository.save(createMember);
 
             // 토큰 발급 후 리턴
-            return jwtUtil.generateToken(createMember.getEmail());
+            return jwtUtil.generateToken(createMember);
         }
 
         throw new LoginException();
