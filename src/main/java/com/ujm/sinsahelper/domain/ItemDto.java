@@ -1,0 +1,63 @@
+package com.ujm.sinsahelper.domain;
+
+import lombok.*;
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+public class ItemDto {
+    private Long itemId;
+
+    //    private String itemName;
+    private String itemUrl;
+
+    // KCH : MainCate와 SubCate embedded로 바꾸는 거 고려하기
+    private String mainCategory;
+    private String subCategory;
+
+    private String priceToday;
+    private String priceYesterday;
+    private String photo;
+    private String review;
+
+    // KCH : django에서 DB에 넣는 부분
+    private Long deliveryScore;
+    private Long sizeScore;
+    private Long qualityScore;
+
+    // preference * score 한 값들을 다 더한 것
+    private Long totalScore;
+
+    public Item toEntity(){
+        Item build = Item.builder()
+                .itemId(itemId)
+                .itemUrl(itemUrl)
+                .mainCategory(mainCategory)
+                .subCategory(subCategory)
+                .priceToday(priceToday)
+                .priceYesterday(priceYesterday)
+                .photo(photo)
+                .review(review)
+                .deliveryScore(deliveryScore)
+                .sizeScore(sizeScore)
+                .qualityScore(qualityScore)
+                .build();
+        return build;
+    }
+
+    @Builder
+    public ItemDto(Long itemId, String itemUrl, String mainCategory, String subCategory, String priceToday, String priceYesterday, String photo, String review, Long deliveryScore, Long sizeScore, Long qualityScore) {
+        this.itemId = itemId;
+        this.itemUrl = itemUrl;
+        this.mainCategory = mainCategory;
+        this.subCategory = subCategory;
+        this.priceToday = priceToday;
+        this.priceYesterday = priceYesterday;
+        this.photo = photo;
+        this.review = review;
+        this.deliveryScore = deliveryScore;
+        this.sizeScore = sizeScore;
+        this.qualityScore = qualityScore;
+    }
+}
