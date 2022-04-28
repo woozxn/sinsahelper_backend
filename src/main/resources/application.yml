@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/sinsahelper
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+
+
+
+jwt:
+  key: dslkajglksdjgweopiriwpeo1290481204lksdjgfalsdk
+
+oauth:
+  provider:
+    kakao:
+      login_uri: https://kauth.kakao.com/oauth/
+      user_info_uri: https://kapi.kakao.com/v2/user/me
+      client_id: f3e8be6cc15cdffba2d5f2b675130366
+      client_secret: zEjUaiVoybU5iJZeIeUe68XB48jz5RGP
+      redirect_uri: http://localhost:3000/auth/kakao/login
+      #redirect_uri: http://localhost:3000/kakaoAuth
+      grant_type: authorization_code
+      rule:
+        prefix: K
+        postfix: kakao.com
+    google:
+      login_uri:
+      client_id: 336086439359-8a48bd29ckp2sdknq6s85ncihs7sc1ok.apps.googleusercontent.com
+      client_secret: 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
+      redirect_uri:
+      rule:
+        prefix: G
+        postfix: google.com
+    naver:
