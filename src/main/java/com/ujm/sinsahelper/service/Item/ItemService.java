@@ -19,11 +19,23 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final CrawlingService crawlingService;
 
     @Transactional
     public Long saveItem(ItemDto itemDto){
         return itemRepository.save(itemDto.toEntity()).getItemId();
     }
+
+    @Transactional
+    public void updateItemPrice() {
+        List<Item> items = itemRepository.findAll();
+        for(Item item : items){
+            System.out.println("item.getPriceToday() = " + item.getPriceToday());
+            item.setPriceYesterday(item.getPriceToday());
+            item.setPriceToday(crawlingService.CrawlingPrice(item.getItemUrl()));
+        }
+    }
+
 
     public List<ItemDto> findItems() {
         List<Item> itemList = itemRepository.findAll();
