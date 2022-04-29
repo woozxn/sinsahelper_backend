@@ -6,6 +6,7 @@ import com.ujm.sinsahelper.service.Item.CrawlingService;
 import com.ujm.sinsahelper.service.Item.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,9 +41,14 @@ public class ItemController {
 
 
         model.addAttribute("items", items);
-        return "redirect:/Search/SearchResult";
+        return "hello";
     }
 
+    @Scheduled(cron = "0 0 5 * * * ")
+    public String priceUpdate(){
+        itemService.updateItemPrice();
+        return "hello";
+    }
 
     // KCH : test용으로 만든 컨트롤러
     @GetMapping(value = "/test")
