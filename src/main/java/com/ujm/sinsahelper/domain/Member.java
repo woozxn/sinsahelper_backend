@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,6 +32,9 @@ public class Member {
 
     @Enumerated(value = EnumType.STRING)
     private AuthRole authRole;
+
+    @OneToMany(mappedBy = "member")
+    private List<WishItem> wishitem = new ArrayList<>();
 
     @Builder
     public Member(String email, String password, String userEmail, String userName, String gender, AuthRole authRole) {
