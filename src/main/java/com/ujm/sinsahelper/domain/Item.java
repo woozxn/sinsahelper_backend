@@ -1,10 +1,9 @@
 package com.ujm.sinsahelper.domain;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,17 +33,20 @@ public class Item {
     private Long sizeScore;
     private Long qualityScore;
 
+    @OneToMany(mappedBy = "item_id")
+    private List<WishItem> wishitem = new ArrayList<>();
+
     // preference * score 한 값들을 다 더한 것
 //    private Long totalScore;
     @Builder
     public Item(Long itemId, String itemUrl, String mainCategory, String subCategory, String priceToday, String priceYesterday, String photo, String review, Long deliveryScore, Long sizeScore, Long qualityScore) {
-        this.itemId = itemId;
-        this.itemUrl = itemUrl;
+        this.itemId = itemId; //
+        this.itemUrl = itemUrl; //
         this.mainCategory = mainCategory;
         this.subCategory = subCategory;
-        this.priceToday = priceToday;
-        this.priceYesterday = priceYesterday;
-        this.photo = photo;
+        this.priceToday = priceToday; //
+        this.priceYesterday = priceYesterday; //
+        this.photo = photo; //
         this.review = review;
         this.deliveryScore = deliveryScore;
         this.sizeScore = sizeScore;
