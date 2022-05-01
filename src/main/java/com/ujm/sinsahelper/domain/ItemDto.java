@@ -12,12 +12,14 @@ public class ItemDto {
     //    private String itemName;
     private String itemUrl;
 
+    private String itemName;
+
     // KCH : MainCate와 SubCate embedded로 바꾸는 거 고려하기
     private String mainCategory;
     private String subCategory;
 
-    private String priceToday;
-    private String priceYesterday;
+    private Long priceToday;
+    private Long priceYesterday;
     private String photo;
     private String review;
 
@@ -32,6 +34,7 @@ public class ItemDto {
     public Item toEntity(){
         Item build = Item.builder()
                 .itemId(itemId)
+                .itemName(itemName)
                 .itemUrl(itemUrl)
                 .mainCategory(mainCategory)
                 .subCategory(subCategory)
@@ -47,8 +50,9 @@ public class ItemDto {
     }
 
     @Builder
-    public ItemDto(Long itemId, String itemUrl, String mainCategory, String subCategory, String priceToday, String priceYesterday, String photo, String review, Long deliveryScore, Long sizeScore, Long qualityScore) {
+    public ItemDto(Long itemId, String itemName, String itemUrl, String mainCategory, String subCategory, Long priceToday, Long priceYesterday, String photo, String review, Long deliveryScore, Long sizeScore, Long qualityScore) {
         this.itemId = itemId;
+        this.itemName = itemName;
         this.itemUrl = itemUrl;
         this.mainCategory = mainCategory;
         this.subCategory = subCategory;
