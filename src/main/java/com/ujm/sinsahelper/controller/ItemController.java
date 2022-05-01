@@ -1,20 +1,23 @@
 package com.ujm.sinsahelper.controller;
 
 
+import com.ujm.sinsahelper.common.response.ErrorResponse;
 import com.ujm.sinsahelper.domain.ItemDto;
 import com.ujm.sinsahelper.service.Item.CrawlingService;
 import com.ujm.sinsahelper.service.Item.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @Slf4j
 public class ItemController {
@@ -22,114 +25,105 @@ public class ItemController {
     private final ItemService itemService;
     private final CrawlingService crawlingService;
 
-    @GetMapping(value = "/getSearch")
-    public String getSearch(@RequestParam("mainCategory") String mainCategory, @RequestParam("subCategory") String subCategory,
-                            @RequestParam("deliveryPreference") Long deliveryPreference, @RequestParam("sizePreference") Long sizePreference,
-                            @RequestParam("qualityPreference") Long qualityPreference, Model model) {
+    @GetMapping(value = "/search/result")
+    public ResponseEntity<List<ItemDto>> getSearch(@RequestParam("mainCategory") String mainCategory, @RequestParam("subCategory") String subCategory,
+                                                   @RequestParam("deliveryPreference") Long deliveryPreference, @RequestParam("sizePreference") Long sizePreference,
+                                                   @RequestParam("qualityPreference") Long qualityPreference) {
+
+        List<ItemDto> items = itemService.findItemByPreference(mainCategory, subCategory,deliveryPreference,sizePreference,qualityPreference);
+
         System.out.println("mainCategory = " + mainCategory);
-        System.out.println("subCategory = " + subCategory);
-        System.out.println("deliveryPreference = " + deliveryPreference);
-        System.out.println("sizePreference = " + sizePreference);
         System.out.println("qualityPreference = " + qualityPreference);
-
-        List<ItemDto> items = itemService.findItemByPreference(mainCategory, subCategory, deliveryPreference, sizePreference, qualityPreference);
-
-
         for(ItemDto i : items){
-            System.out.println(i);
+            System.out.println(i.getTotalScore());
         }
+//        Long pnum = items.get(0).getItemId();
 
-
-        model.addAttribute("items", items);
-        return "hello";
+//        쟝고 신호 보내는 코드
+//        try{
+//            URL url = new URL("http://localhost:8000/api/connect/");
+//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//            conn.setRequestMethod("GET");
+//            conn.setRequestProperty("pk", String.valueOf(pnum));
+//            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//            String inputline;
+//            String resultXmlText ="";
+//            while((inputline= br.readLine())!=null){
+//                resultXmlText+=inputline;
+//            }
+//            System.out.println(resultXmlText);
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
+        return ResponseEntity.status(HttpStatus.OK).body(items);
     }
 
+
+    @GetMapping(value = "/item")
+    public ResponseEntity<Object> addItem(@RequestParam("url") String url) throws IOException {
+        System.out.println("url = " + url);
+        ItemDto item = new ItemDto();
+        item.setItemUrl(url);
+        item.setReview(crawlingService.crawlingReview(url));
+        crawlingService.crawlingItemInfo(item, url);
+        item.setPriceToday(crawlingService.crawlingPrice(url));
+
+        Long result = itemService.saveItem(item);
+        //중복 값일 경우 errorResponse 생성 후, 반납, 아닐 경우 item객체 반납
+        if(result<0){
+            return ResponseEntity.status(HttpStatus.OK).body(new ErrorResponse("redundant item"));
+        }
+        else
+            return ResponseEntity.status(HttpStatus.OK).body(itemService.findOne(result));
+
+
+        //        쟝고 신호 보내는 코드
+//        try{
+//            URL django = new URL("http://localhost:8000/api/connect/");
+//            HttpURLConnection conn = (HttpURLConnection) django.openConnection();
+//            conn.setRequestMethod("GET");
+//            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//            String inputline;
+//            String resultXmlText ="";
+//            while((inputline= br.readLine())!=null){
+//                resultXmlText+=inputline;
+//            }
+//            System.out.println(resultXmlText);
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
+    }
+
+
     @Scheduled(cron = "0 0 5 * * * ")
-    public String priceUpdate(){
+    public String priceUpdate() throws IOException {
         itemService.updateItemPrice();
         return "hello";
     }
 
-    // KCH : test용으로 만든 컨트롤러
-    @GetMapping(value = "/test")
-    public String test() {
-        ItemDto a = new ItemDto();
-        a.setItemUrl("https://store.musinsa.com/app/goods/1557508");
-        a.setMainCategory("상의");
-        a.setSubCategory("맨투맨");
-
-        a.setPriceToday(crawlingService.CrawlingPrice(a.getItemUrl()));
-        a.setPriceYesterday("0");
-        a.setPhoto(crawlingService.CrawlingPhoto(a.getItemUrl()));
-        a.setReview(crawlingService.CrawlingReview(a.getItemUrl()));
-
-        a.setDeliveryScore(12L);
-        a.setSizeScore(22L);
-        a.setQualityScore(23L);
-        itemService.saveItem(a);
-
-        ItemDto b = new ItemDto();
-        b.setItemUrl("https://store.musinsa.com/app/goods/2038497");
-        b.setMainCategory("하의");
-        b.setSubCategory("맨투맨");
-
-        b.setPriceToday(crawlingService.CrawlingPrice(b.getItemUrl()));
-        b.setPriceYesterday("0");
-        b.setPhoto(crawlingService.CrawlingPhoto(b.getItemUrl()));
-        b.setReview(crawlingService.CrawlingReview(b.getItemUrl()));
-
-        b.setDeliveryScore(13L);
-        b.setSizeScore(14L);
-        b.setQualityScore(22L);
-        itemService.saveItem(b);
-
-        ItemDto c = new ItemDto();
-        c.setItemUrl("https://store.musinsa.com/app/goods/2085371");
-        c.setMainCategory("상의");
-        c.setSubCategory("반팔");
-
-        c.setPriceToday(crawlingService.CrawlingPrice(c.getItemUrl()));
-        c.setPriceYesterday("0");
-        c.setPhoto(crawlingService.CrawlingPhoto(c.getItemUrl()));
-        c.setReview(crawlingService.CrawlingReview(c.getItemUrl()));
-
-        c.setDeliveryScore(55L);
-        c.setSizeScore(1L);
-        c.setQualityScore(1L);
-        itemService.saveItem(c);
-
-        ItemDto d = new ItemDto();
-        d.setItemUrl("https://store.musinsa.com/app/goods/947067");
-        d.setMainCategory("상의");
-        d.setSubCategory("맨투맨");
-
-        d.setPriceToday(crawlingService.CrawlingPrice(d.getItemUrl()));
-        d.setPriceYesterday("0");
-        d.setPhoto(crawlingService.CrawlingPhoto(d.getItemUrl()));
-        d.setReview(crawlingService.CrawlingReview(d.getItemUrl()));
-
-        d.setDeliveryScore(1L);
-        d.setSizeScore(55L);
-        d.setQualityScore(1L);
-        itemService.saveItem(d);
-
-        ItemDto e = new ItemDto();
-        e.setItemUrl("https://store.musinsa.com/app/goods/1582356");
-        e.setMainCategory("상의");
-        e.setSubCategory("맨투맨");
-
-        e.setPriceToday(crawlingService.CrawlingPrice(e.getItemUrl()));
-        e.setPriceYesterday("0");
-        e.setPhoto(crawlingService.CrawlingPhoto(e.getItemUrl()));
-        e.setReview(crawlingService.CrawlingReview(e.getItemUrl()));
-
-        e.setDeliveryScore(1L);
-        e.setSizeScore(1L);
-        e.setQualityScore(55L);
-        itemService.saveItem(e);
-
-        return "hello";
-    }
+////    // KCH : test용으로 만든 컨트롤러
+//    @GetMapping(value = "/test")
+//    public String test() {
+//        ItemDto a = new ItemDto();
+//        a.setItemUrl("https://store.musinsa.com/app/goods/1557508");
+//        a.setMainCategory("상의");
+//        a.setSubCategory("맨투맨");
+//
+//        a.setPriceToday(crawlingService.CrawlingPrice(a.getItemUrl()));
+//        a.setPriceYesterday("0");
+//        a.setPhoto(crawlingService.CrawlingPhoto(a.getItemUrl()));
+//        a.setReview(crawlingService.crawlingReview(a.getItemUrl()));
+//
+//        a.setDeliveryScore(12L);
+//        a.setSizeScore(22L);
+//        a.setQualityScore(23L);
+//        itemService.saveItem(a);
+//
+//
+//        return "hello";
+//    }
 
 
 

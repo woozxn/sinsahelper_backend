@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -23,16 +24,22 @@ public class ItemService {
 
     @Transactional
     public Long saveItem(ItemDto itemDto){
-        return itemRepository.save(itemDto.toEntity()).getItemId();
+        String url = itemDto.getItemUrl();
+        if(!itemRepository.existsByItemUrl(url)){
+            return itemRepository.save(itemDto.toEntity()).getItemId();
+        }
+        else{
+            return -1L;
+        }
     }
 
     @Transactional
-    public void updateItemPrice() {
+    public void updateItemPrice() throws IOException {
         List<Item> items = itemRepository.findAll();
         for(Item item : items){
             System.out.println("item.getPriceToday() = " + item.getPriceToday());
             item.setPriceYesterday(item.getPriceToday());
-            item.setPriceToday(crawlingService.CrawlingPrice(item.getItemUrl()));
+            item.setPriceToday(crawlingService.crawlingPrice(item.getItemUrl()));
         }
     }
 
@@ -43,6 +50,7 @@ public class ItemService {
         for (Item item : itemList) {
             ItemDto itemDto= ItemDto.builder()
                     .itemId(item.getItemId())
+                    .itemName(item.getItemName())
                     .itemUrl(item.getItemUrl())
                     .mainCategory(item.getMainCategory())
                     .subCategory(item.getSubCategory())
@@ -63,6 +71,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemId).get();
         ItemDto itemDto= ItemDto.builder()
                 .itemId(item.getItemId())
+                .itemName(item.getItemName())
                 .itemUrl(item.getItemUrl())
                 .mainCategory(item.getMainCategory())
                 .subCategory(item.getSubCategory())
@@ -83,6 +92,7 @@ public class ItemService {
         for (Item item : itemList) {
             ItemDto itemDto= ItemDto.builder()
                     .itemId(item.getItemId())
+                    .itemName(item.getItemName())
                     .itemUrl(item.getItemUrl())
                     .mainCategory(item.getMainCategory())
                     .subCategory(item.getSubCategory())

@@ -13,8 +13,11 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     //    List<Item> findByMainCategoryAndSubCategoryOrderByTotalScoreDesc(String mainCategory, String subCategory);
     List<Item> findByMainCategoryAndSubCategory(String mainCategory, String subCategory);
+    boolean existsByItemUrl(String itemUrl);
 
-    @Query(value = "SELECT M FROM Item m where m.itemId = :itemId")
-    public Item findItemByItemId(@Param("itemId") Long itemId);
+//    @Query(value = "SELECT M FROM Item M where M.itemId = :itemId")
+//    public Item findItemByItemId(@Param("itemId") Long itemId);
+
+    Item findItemByItemId(Long itemId);
 }
 

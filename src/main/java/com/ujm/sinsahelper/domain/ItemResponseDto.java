@@ -1,6 +1,5 @@
-package com.ujm.sinsahelper.service.Item.dto;
+package com.ujm.sinsahelper.domain;
 
-import com.ujm.sinsahelper.domain.Item;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -8,8 +7,8 @@ public class ItemResponseDto {
 
     private Long itemId;
     private String itemUrl;
-    private String priceToday;
-    private String priceYesterday;
+    Long priceToday;
+    Long priceYesterday;
     private String photo;
 
     public static ItemResponseDto toDto(Item item) {

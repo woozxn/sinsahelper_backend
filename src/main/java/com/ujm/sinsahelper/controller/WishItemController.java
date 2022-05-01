@@ -1,6 +1,6 @@
 package com.ujm.sinsahelper.controller;
 
-import com.ujm.sinsahelper.service.Item.dto.ItemResponseDto;
+import com.ujm.sinsahelper.domain.ItemResponseDto;
 import com.ujm.sinsahelper.service.Wish.WishItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -6,7 +6,7 @@ import com.ujm.sinsahelper.domain.WishItem;
 import com.ujm.sinsahelper.repository.AuthRepository;
 import com.ujm.sinsahelper.repository.ItemRepository;
 import com.ujm.sinsahelper.repository.WishItemRepository;
-import com.ujm.sinsahelper.service.Item.dto.ItemResponseDto;
+import com.ujm.sinsahelper.domain.ItemResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
