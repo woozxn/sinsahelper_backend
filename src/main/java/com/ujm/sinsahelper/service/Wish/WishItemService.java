@@ -40,6 +40,17 @@ public class WishItemService {
     }
 
     @Transactional
+    public void deleteWishItem(Long item_id) {
+        String email = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()); //email
+
+        Optional<WishItem> WishItem = wishItemRepository.findByEmailAndItemId(email, item_id);
+        if(WishItem.isPresent()){
+            wishItemRepository.delete(WishItem.get());
+        }
+
+    }
+
+    @Transactional
     public List<ItemResponseDto> getWishList() {
         String email = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()); //email
         List<WishItem> wishItemList = wishItemRepository.findByEmail(email);
@@ -50,4 +61,21 @@ public class WishItemService {
 
         return resultList;
     }
+
+
+    @Transactional
+    public boolean getWishByEmailAndItemId(Long item_id) {
+        String email = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()); //email
+
+        Optional<WishItem> WishItem = wishItemRepository.findByEmailAndItemId(email, item_id);
+
+        if(WishItem.isEmpty()){
+            return false;
+        }
+        else{
+            return true;
+        }
+
+    }
+
 }

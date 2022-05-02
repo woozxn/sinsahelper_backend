@@ -29,10 +29,11 @@ public class ItemController {
     public ResponseEntity<List<ItemDto>> getSearch(@RequestParam("mainCategory") String mainCategory, @RequestParam("subCategory") String subCategory,
                                                    @RequestParam("deliveryPreference") Long deliveryPreference, @RequestParam("sizePreference") Long sizePreference,
                                                    @RequestParam("qualityPreference") Long qualityPreference) {
-
+        System.out.println("mainCategory = " + mainCategory);
+        System.out.println("subCategory = " + subCategory);
         List<ItemDto> items = itemService.findItemByPreference(mainCategory, subCategory,deliveryPreference,sizePreference,qualityPreference);
 
-        System.out.println("mainCategory = " + mainCategory);
+
         System.out.println("qualityPreference = " + qualityPreference);
         for(ItemDto i : items){
             System.out.println(i.getTotalScore());
@@ -68,6 +69,12 @@ public class ItemController {
         item.setReview(crawlingService.crawlingReview(url));
         crawlingService.crawlingItemInfo(item, url);
         item.setPriceToday(crawlingService.crawlingPrice(url));
+
+        //KCH Django 연결전 score를 설정해주는 부분
+        item.setDeliveryScore(Long.valueOf((int)(Math.random()*100) + 1));
+        item.setSizeScore(Long.valueOf((int)(Math.random()*100) + 1));
+        item.setQualityScore(Long.valueOf((int)(Math.random()*100) + 1));
+
 
         Long result = itemService.saveItem(item);
         //중복 값일 경우 errorResponse 생성 후, 반납, 아닐 경우 item객체 반납
