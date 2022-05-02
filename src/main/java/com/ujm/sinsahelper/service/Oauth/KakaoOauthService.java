@@ -42,7 +42,7 @@ public class KakaoOauthService implements OauthService {
 
     private OauthProperties.Kakao kakao;
 
-    public static final String AUTHORIZATION = "Authorization";
+    public static final String AUTHORIZATION = "authorization";
     public static final String GRANT_TYPE = "grant_type";
     public static final String CLIENT_ID = "client_id";
     public static final String REDIRECT_URI = "redirect_uri";
