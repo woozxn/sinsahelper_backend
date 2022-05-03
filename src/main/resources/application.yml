@@ -14,7 +14,7 @@ spring:
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/sinsahelper?serverTimezone=UTC
     username: root
-    password: rlaclgns5628
+    password: 05250525wls!
     driver: com.mysql.cj.jdbc.Driver
     sql-script-encoding: UTF-8
 
@@ -39,7 +39,6 @@ oauth:
       client_id: f3e8be6cc15cdffba2d5f2b675130366
       client_secret: zEjUaiVoybU5iJZeIeUe68XB48jz5RGP
       redirect_uri: http://localhost:3000/auth/kakao/login
-      #redirect_uri: http://localhost:3000/kakaoAuth
       grant_type: authorization_code
       rule:
         prefix: K
