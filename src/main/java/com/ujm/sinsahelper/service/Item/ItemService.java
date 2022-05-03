@@ -4,6 +4,8 @@ package com.ujm.sinsahelper.service.Item;
 import com.ujm.sinsahelper.domain.Item;
 import com.ujm.sinsahelper.domain.ItemDto;
 import com.ujm.sinsahelper.repository.ItemRepository;
+import com.ujm.sinsahelper.repository.WishItemRepository;
+import com.ujm.sinsahelper.service.Wish.WishItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final CrawlingService crawlingService;
+    private final WishItemService wishItemService;
 
     @Transactional
     public Long saveItem(ItemDto itemDto){
@@ -108,8 +111,11 @@ public class ItemService {
         }
         for (ItemDto item : itemDtoList) {
             Long totalScore = calc(item, dPref, sPref, qPref);
+
             item.setTotalScore(totalScore);
             System.out.println(item.getTotalScore());
+
+            item.setLike(wishItemService.getWishByEmailAndItemId(item.getItemId()));
         }
 
         itemDtoList.sort(new Comparator<ItemDto>() {
@@ -118,6 +124,12 @@ public class ItemService {
                 return (int) (o2.getTotalScore()- o1.getTotalScore());
             }
         });
+
+        if(itemDtoList.size()>4){
+            itemDtoList = itemDtoList.subList(0,5);
+        }
+
+
         return itemDtoList;
     }
 

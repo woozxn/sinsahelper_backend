@@ -1,8 +1,10 @@
 package com.ujm.sinsahelper.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public class ItemResponseDto {
 
     private Long itemId;

@@ -4,10 +4,7 @@ import com.ujm.sinsahelper.domain.ItemResponseDto;
 import com.ujm.sinsahelper.service.Wish.WishItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,10 +15,18 @@ public class WishItemController {
 
     private final WishItemService wishItemService;
 
-    @PostMapping(value = "/wish/{id}")
-    public void wish(@PathVariable(value = "id") Long item_id) {
-
+    @GetMapping(value = "/wish/like/{id}")
+    public String like(@PathVariable(value = "id") Long item_id) {
+        System.out.println("item_id = " + item_id);
         wishItemService.addWishItem(item_id);
+
+        return "suscess";
+    }
+
+    @DeleteMapping(value = "/wish/dislike/{id}")
+    public void dislike(@PathVariable(value = "id") Long item_id) {
+
+        wishItemService.deleteWishItem(item_id);
 
     }
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface WishItemRepository extends JpaRepository<WishItem, Long> {
@@ -27,4 +28,6 @@ public interface WishItemRepository extends JpaRepository<WishItem, Long> {
     List<WishItem> findByEmail(@Param("email") String email);
 
 
+    @Query("SELECT W FROM WishItem W JOIN FETCH W.item I JOIN W.member M WHERE M.email = :email and I.itemId = :itemId")
+    Optional<WishItem> findByEmailAndItemId(@Param("email") String email, @Param("itemId") Long itemId);
 }

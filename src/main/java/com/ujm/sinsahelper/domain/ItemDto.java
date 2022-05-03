@@ -31,6 +31,8 @@ public class ItemDto {
     // preference * score 한 값들을 다 더한 것
     private Long totalScore;
 
+    private boolean like;
+
     public Item toEntity(){
         Item build = Item.builder()
                 .itemId(itemId)
@@ -50,7 +52,7 @@ public class ItemDto {
     }
 
     @Builder
-    public ItemDto(Long itemId, String itemName, String itemUrl, String mainCategory, String subCategory, Long priceToday, Long priceYesterday, String photo, String review, Long deliveryScore, Long sizeScore, Long qualityScore) {
+    public ItemDto(Long itemId, String itemName, String itemUrl, String mainCategory, String subCategory, Long priceToday, Long priceYesterday, String photo, String review, Long deliveryScore, Long sizeScore, Long qualityScore, boolean like) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemUrl = itemUrl;
@@ -63,5 +65,6 @@ public class ItemDto {
         this.deliveryScore = deliveryScore;
         this.sizeScore = sizeScore;
         this.qualityScore = qualityScore;
+        this.like = like;
     }
 }
