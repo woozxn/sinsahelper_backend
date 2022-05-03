@@ -125,7 +125,10 @@ public class ItemService {
             }
         });
 
-        itemDtoList = itemDtoList.subList(0,5);
+        if(itemDtoList.size()>4){
+            itemDtoList = itemDtoList.subList(0,5);
+        }
+
 
         return itemDtoList;
     }
