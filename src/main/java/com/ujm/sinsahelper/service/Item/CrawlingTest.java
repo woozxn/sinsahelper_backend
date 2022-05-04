@@ -35,9 +35,7 @@ public class CrawlingTest {
         try {
             driver.get(base_url);
             WebElement img = driver.findElement(By.xpath("//*[@id=\"bigimg\"]"));
-            System.out.println("img = " + img.toString());
             en = img.getAttribute("src");
-            System.out.println("en = " + en);
 
         } catch (Exception e) {
             e.printStackTrace();

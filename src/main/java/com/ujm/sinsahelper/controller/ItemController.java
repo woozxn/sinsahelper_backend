@@ -33,15 +33,9 @@ public class ItemController {
     public ResponseEntity<List<ItemDto>> getSearch(@RequestParam("mainCategory") String mainCategory, @RequestParam("subCategory") String subCategory,
                                                    @RequestParam("deliveryPreference") Long deliveryPreference, @RequestParam("sizePreference") Long sizePreference,
                                                    @RequestParam("qualityPreference") Long qualityPreference) {
-        System.out.println("mainCategory = " + mainCategory);
-        System.out.println("subCategory = " + subCategory);
         List<ItemDto> items = itemService.findItemByPreference(mainCategory, subCategory,deliveryPreference,sizePreference,qualityPreference);
 
 
-        System.out.println("qualityPreference = " + qualityPreference);
-//        for(ItemDto i : items){
-//            System.out.println(i.getTotalScore());
-//        }
 
         return ResponseEntity.status(HttpStatus.OK).body(items);
     }
@@ -49,7 +43,6 @@ public class ItemController {
 
     @GetMapping(value = "/item")
     public ResponseEntity<Object> addItem(@RequestParam("url") String url) throws IOException {
-        System.out.println("url = " + url);
         ItemDto item = new ItemDto();
         item.setItemUrl(url);
         item.setReview(crawlingService.crawlingReview(url));
@@ -81,7 +74,6 @@ public class ItemController {
             while((inputline= br.readLine())!=null){
                 resultXmlText+=inputline;
             }
-            System.out.println(resultXmlText);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -92,7 +84,6 @@ public class ItemController {
 
     @Scheduled(cron = "0 0 5 * * * ")
     public void priceUpdate() throws IOException {
-        System.out.println("시작");
         itemService.updateItemPrice();
 
         //        쟝고 신호 보내는 코드
@@ -107,7 +98,6 @@ public class ItemController {
             while((inputline= br.readLine())!=null){
                 resultXmlText+=inputline;
             }
-            System.out.println(resultXmlText);
         }
         catch (Exception e){
             e.printStackTrace();

@@ -40,7 +40,6 @@ public class ItemService {
     public void updateItemPrice() throws IOException {
         List<Item> items = itemRepository.findAll();
         for(Item item : items){
-            System.out.println("item.getPriceToday() = " + item.getPriceToday());
             item.setPriceYesterday(item.getPriceToday());
             item.setPriceToday(crawlingService.crawlingPrice(item.getItemUrl()));
         }
@@ -113,7 +112,6 @@ public class ItemService {
             Long totalScore = calc(item, dPref, sPref, qPref);
 
             item.setTotalScore(totalScore);
-            System.out.println(item.getTotalScore());
 
             item.setLike(wishItemService.getWishByEmailAndItemId(item.getItemId()));
         }

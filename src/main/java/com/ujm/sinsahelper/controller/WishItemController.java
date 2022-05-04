@@ -16,11 +16,10 @@ public class WishItemController {
     private final WishItemService wishItemService;
 
     @GetMapping(value = "/wish/like/{id}")
-    public String like(@PathVariable(value = "id") Long item_id) {
-        System.out.println("item_id = " + item_id);
+    public void like(@PathVariable(value = "id") Long item_id) {
+
         wishItemService.addWishItem(item_id);
 
-        return "suscess";
     }
 
     @DeleteMapping(value = "/wish/dislike/{id}")
