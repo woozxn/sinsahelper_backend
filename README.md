@@ -5,7 +5,7 @@
 [![Build Status][travis-image]][travis-url]
 [![Downloads Stats][npm-downloads]][npm-url]
 
-한 두 문단으로 프로젝트 소개 글을 작성합니다.
+BERT 기반의 선호도 분석 모델을 통한 쇼핑몰 상품 분석 플랫폼 (SinsaHelper)
 
 ![](../header.png)
 
