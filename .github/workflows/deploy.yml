@@ -1,0 +1,48 @@
+name: Manual workflow
+
+on:
+  push:
+    branches: master
+  pull_request:
+    branches: master
+
+# jobs -> [jobA,jobB,jobC] -> steps -> [stepA,stepB,stepC]
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{matrix.os}}
+    
+    steps:
+    - name: Setup Checkout
+      uses: actions/checkout@v3
+      
+    - name: Setup Java JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin # check
+        java-version: 11
+        
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      
+    - name: Execute Gradle build
+      run: ./gradlew build
+      
+  
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: squib0612/sinsahelper-backend:latest
