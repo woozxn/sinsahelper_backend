@@ -10,8 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./apps
     
     steps:
     - name: Setup Checkout
@@ -28,18 +26,7 @@ jobs:
       
     - name: Execute Gradle build
       run: ./gradlew clean build --exclude-task test
-      env:
-        working-directory: ./apps
       
-  
-  docker:
-    runs-on: ubuntu-latest
-    needs: build
-    env:
-      working-directory: ./apps
-    steps:
-    - name: Setup Checkout
-      uses: actions/checkout@v3
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
@@ -47,13 +34,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: log
       run: pwd
-      env:
-        working-directory: ./apps
     - name: build image
       run: docker build -t squib0612/sinsahelper-backend:latest .
-      env:
-        working-directory: ./apps
     - name: push image to hub
       run: docker push squib0612/sinsahelper-backend:latest
-      env:
-        working-directory: ./apps
