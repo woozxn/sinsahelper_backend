@@ -50,9 +50,8 @@ jobs:
         name: jarfile
         path: ./build/libs/sinsahelper-0.0.1-SNAPSHOT.jar
     - name: log
-      run: ls -l ./build/libs
-    - name: Build and push
-      uses: docker/build-push-action@v2
-      with:
-        push: true
-        tags: squib0612/sinsahelper-backend:latest
+      run: pwd
+    - name: build image
+      run: docker build -t squib0612/sinsahelper-backend:latest .
+    - name: push image to hub
+      run: docker push squib0612/sinsahelper-backend:latest
