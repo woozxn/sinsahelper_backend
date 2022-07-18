@@ -28,6 +28,8 @@ jobs:
       
     - name: Execute Gradle build
       run: ./gradlew clean build --exclude-task test
+      env:
+        working-directory: ./apps
       
   
   docker:
@@ -45,7 +47,13 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: log
       run: pwd
+      env:
+        working-directory: ./apps
     - name: build image
       run: docker build -t squib0612/sinsahelper-backend:latest .
+      env:
+        working-directory: ./apps
     - name: push image to hub
       run: docker push squib0612/sinsahelper-backend:latest
+      env:
+        working-directory: ./apps
