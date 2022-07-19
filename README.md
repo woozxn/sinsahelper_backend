@@ -1,5 +1,5 @@
 # SinsaHelper
-> 사용자 쇼핑 선호도 기반으로 상품을 추천해주는 웹 서비스 .
+> 사용자 쇼핑 선호도 기반으로 상품을 추천해주는 웹 서비스 입니다 .
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
