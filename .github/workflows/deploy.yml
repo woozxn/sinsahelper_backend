@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: master
 
-# jobs -> [jobA,jobB,jobC] -> steps -> [stepA,stepB,stepC]
 jobs:
   build:
     runs-on: ubuntu-latest
