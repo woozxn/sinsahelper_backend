@@ -31,9 +31,9 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
-    - name: log
-      run: pwd
+ 
     - name: build image
       run: docker build -t squib0612/sinsahelper-backend:latest .
+      
     - name: push image to hub
       run: docker push squib0612/sinsahelper-backend:latest
