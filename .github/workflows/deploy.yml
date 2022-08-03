@@ -37,3 +37,19 @@ jobs:
       
     - name: push image to hub
       run: docker push squib0612/sinsahelper-backend:latest
+
+    # deploy to production
+    - name: Deploy to prod
+      uses: appleboy/ssh-action@master
+      id: deploy-prod
+      if: contains(github.ref, 'master')
+      with:
+        host: ${{ secrets.EC2_IP }}
+        username: ec2-user
+        password: ${{ secrets.EC2_PASSWORD }}
+        script: |
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_REPO }}
+            docker-compose up -d
+            docker image prune -f
+            
