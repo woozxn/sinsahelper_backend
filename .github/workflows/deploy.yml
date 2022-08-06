@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -49,7 +49,7 @@ jobs:
         password: ${{ secrets.EC2_PASSWORD }}
         script: |
             sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_REPO }}
-            sudo docker run -d -p 80:8080 --name sinsahelper-backend sinsahelper-backend:latest
+            sudo docker pull squib0612/sinsahelper-backend
+            docker-compose up -d
             docker image prune -f
             
