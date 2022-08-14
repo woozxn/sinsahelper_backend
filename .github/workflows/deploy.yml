@@ -50,5 +50,4 @@ jobs:
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull squib0612/sinsahelper-backend
             docker-compose up -d
-            docker image prune -f
             
