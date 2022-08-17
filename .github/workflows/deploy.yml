@@ -48,3 +48,4 @@ jobs:
         script: |
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull squib0612/sinsahelper-backend
+            sudo docker run -d -p 80:8080 --name sinsahelper-backend sinsahelper-backend:latest
