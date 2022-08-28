@@ -36,11 +36,29 @@ jobs:
       
     - name: push image to hub
       run: docker push squib0612/sinsahelper-backend:latest
+#     - name: Docker build
+#       run: |
+#           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+#           docker build -t ${{ secrets.PROJECT_NAME }} .
+#           docker tag ${{ secrets.PROJECT_NAME }} ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
+#           docker push ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
+          
+#     - name: Deploy
+#       uses: appleboy/ssh-action@master
+#       with:
+#         host: ${{ secrets.EC2_IP }}
+#         username: ec2-user
+#         key: ${{ secrets.EC2_PASSWORD }}
+#         envs: GITHUB_SHA
+#         script: |
+#             docker rmi ${docker images -q}
+#             docker pull ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB
+      
+    
 
     # deploy to production
     - name: Deploy to prod
       uses: appleboy/ssh-action@master
-      id: deploy-prod
       with:
         host: ${{ secrets.EC2_IP }}
         username: ec2-user
@@ -51,5 +69,5 @@ jobs:
             sudo docker tag squib0612/sinsahelper:latest backend
             sudo docker stop backend
             sudo docker rm backend
-            sudo docker run -d -name backend -p 80:8080 backend
+            sudo docker run -d --name backend -p 80:8080 backend
 
