@@ -59,7 +59,6 @@ jobs:
             docker rm ${{ secrets.PROJECT_NAME }}
             docker run -d --name ${{secrets.PROJECT_NAME }} -p 80:8080 ${{ secrets.PROJECT_NAME }}
       
-    
 
 #     # deploy to production
 #     - name: Deploy to prod
