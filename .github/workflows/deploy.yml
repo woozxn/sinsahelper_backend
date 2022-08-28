@@ -49,7 +49,7 @@ jobs:
       with:
         host: ${{ secrets.EC2_IP }}
         username: ec2-user
-        key: ${{ secrets.EC2_PASSWORD }}
+        key: ${{ secrets.PRIVATE_KEY }}
         envs: GITHUB_SHA
         script: |
             docker rmi ${docker images -q}
