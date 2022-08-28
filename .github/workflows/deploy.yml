@@ -39,10 +39,10 @@ jobs:
 
     - name: Docker build
       run: |
-          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-          docker build -t ${{ secrets.PROJECT_NAME }} .
-          docker tag ${{ secrets.PROJECT_NAME }} ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
-          docker push ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
+          sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          sudo docker build -t ${{ secrets.PROJECT_NAME }} .
+          sudo docker tag ${{ secrets.PROJECT_NAME }} ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
+          sudo docker push ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
           
     - name: Deploy
       uses: appleboy/ssh-action@v0.1.4
@@ -52,12 +52,12 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         envs: GITHUB_SHA
         script: |
-            docker rmi ${docker images -q}
-            docker pull ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
-            docker tag ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7} ${{ secrets.PROJECT_NAME }}
-            docker stop ${{ secrets.PROJECT_NAME }}
-            docker rm ${{ secrets.PROJECT_NAME }}
-            docker run -d --name ${{secrets.PROJECT_NAME }} -p 80:8080 ${{ secrets.PROJECT_NAME }}
+            sudo docker rmi ${docker images -q}
+            sudo docker pull ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
+            sudo docker tag ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7} ${{ secrets.PROJECT_NAME }}
+            sudo docker stop ${{ secrets.PROJECT_NAME }}
+            sudo docker rm ${{ secrets.PROJECT_NAME }}
+            sudo docker run -d --name ${{secrets.PROJECT_NAME }} -p 80:8080 ${{ secrets.PROJECT_NAME }}
       
 
 #     # deploy to production
