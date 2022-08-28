@@ -45,7 +45,7 @@ jobs:
           docker push ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
           
     - name: Deploy
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v0.1.4
       with:
         host: ${{ secrets.EC2_IP }}
         username: ec2-user
